@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { motion } from "motion/react"
-import { BsRobot, BsCoin } from "react-icons/bs"
+import { BsRobot, BsCoin, BsShieldFill } from "react-icons/bs"
 import { useNavigate } from 'react-router-dom'
 import { setUserData } from '../redux/userSlice'
 import axios from 'axios'
@@ -36,27 +36,20 @@ function Navbar() {
         className='w-full max-w-6xl bg-white rounded-[24px] shadow-sm border border-gray-200 px-8 py-4 flex justify-between items-center relative'>
 
         {/* Logo */}
-        <div
-          onClick={() => navigate("/")}
-          className='flex items-center gap-3 cursor-pointer'>
-          <div className='bg-black text-white p-2 rounded-lg'>
-            <BsRobot size={18} />
-          </div>
+        <div onClick={() => navigate("/")} className='flex items-center gap-3 cursor-pointer'>
+          <div className='bg-black text-white p-2 rounded-lg'><BsRobot size={18} /></div>
           <h1 className='font-semibold hidden md:block text-lg'>InterQ</h1>
         </div>
 
         {/* Right side */}
         <div className='flex items-center gap-6 relative'>
-
           {userData ? (
             <>
-              {/* Credits */}
               <div className='flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full text-md'>
                 <BsCoin size={20} />
                 <span>{userData?.credits ?? "..."}</span>
               </div>
 
-              {/* User icon */}
               <div className='relative'>
                 <button
                   onClick={() => setShowUserPopup(!showUserPopup)}
@@ -65,15 +58,20 @@ function Navbar() {
                 </button>
 
                 {showUserPopup && (
-                  <div className='absolute right-0 mt-3 w-48 bg-white shadow-xl border border-gray-200 rounded-xl p-4 z-50'>
-                    <p className='text-sm text-blue-500 font-medium mb-2'>
-                      {userData?.name ?? "User"}
-                    </p>
+                  <div className='absolute right-0 mt-3 w-52 bg-white shadow-xl border border-gray-200 rounded-xl p-4 z-50'>
+                    <p className='text-sm text-blue-500 font-medium mb-2'>{userData?.name ?? "User"}</p>
                     <button
                       onClick={() => { navigate("/history"); setShowUserPopup(false) }}
                       className='w-full text-left text-sm py-2 hover:text-black text-gray-600'>
                       Interview History
                     </button>
+                    {userData?.role === 'admin' && (
+                      <button
+                        onClick={() => { navigate("/admin"); setShowUserPopup(false) }}
+                        className='w-full text-left text-sm py-2 hover:text-green-600 text-gray-600 flex items-center gap-2'>
+                        <BsShieldFill size={12} className='text-green-500' /> Admin Panel
+                      </button>
+                    )}
                     <button
                       onClick={handleLogout}
                       className='w-full text-left text-sm py-2 hover:text-red-500 text-gray-600'>

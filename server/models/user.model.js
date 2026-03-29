@@ -1,18 +1,13 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema({
-  name: {
+  name: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  credits: { type: Number, default: 999999 },
+  role: {
     type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  credits: {
-    type: Number,
-    default: 999999  // ✅ Unlimited credits
+    enum: ["user", "admin"],
+    default: "user"
   }
 }, { timestamps: true })
 

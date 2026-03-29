@@ -8,14 +8,22 @@ import InterviewPage from './pages/InterviewPage'
 import InterviewHistory from './pages/InterviewHistory'
 import InterviewReport from './pages/InterviewReport'
 import AuthPage from './pages/AuthPage'
+import AdminPanel from './pages/AdminPanel'
 
 export const ServerUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:6000"
 
-// Protected route — redirects to /auth if not logged in
 function ProtectedRoute({ children }) {
   const { userData, loading } = useSelector((state) => state.user)
   if (loading) return null
   if (!userData) return <Navigate to="/auth" replace />
+  return children
+}
+
+function AdminRoute({ children }) {
+  const { userData, loading } = useSelector((state) => state.user)
+  if (loading) return null
+  if (!userData) return <Navigate to="/auth" replace />
+  if (userData.role !== 'admin') return <Navigate to="/" replace />
   return children
 }
 
@@ -42,6 +50,7 @@ function App() {
       <Route path='/interview' element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
       <Route path='/history' element={<ProtectedRoute><InterviewHistory /></ProtectedRoute>} />
       <Route path='/report/:id' element={<ProtectedRoute><InterviewReport /></ProtectedRoute>} />
+      <Route path='/admin' element={<AdminRoute><AdminPanel /></AdminRoute>} />
     </Routes>
   )
 }
